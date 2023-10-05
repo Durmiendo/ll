@@ -6,12 +6,15 @@ public class Lexer {
     private String input;
     private int currentIndex;
     private StandardLibrary standardLibrary;
+    public List<Token> functions;
     private static final char[] SPECIAL_CHARS = {'(', ')', '{', '}', ',', ';', ':'};
     private String[] SPECIAL_WORD = {
             "function",
             "while",
             "for",
-            "return"
+            "return",
+            "if",
+            "jump"
     };
 
 
@@ -19,7 +22,10 @@ public class Lexer {
         this.input = input;
         this.currentIndex = 0;
         this.standardLibrary = new StandardLibrary();
+        functions = new ArrayList<>();
     }
+
+
     public List<Token> tokens = new ArrayList<>();
     public List<Token> tokenize() {
 
@@ -44,6 +50,7 @@ public class Lexer {
                 currentIndex++;
             }
         }
+
         return tokens;
     }
 
@@ -78,27 +85,48 @@ public class Lexer {
 
         String identifierStr = identifier.toString();
 
-
         if (standardLibrary.isFunction(identifierStr)) {
             return processFunction(identifierStr);
         } else if ((tokens.size() > 1) && (tokens.get(tokens.size() - 1).c[0].equals(SPECIAL_WORD[0]))) {
-            return new Token(TokenType.function, new String[] {identifierStr});
+            Token r =  processFunction(identifierStr);
+            r.type = TokenType.function;
+            functions.add(r);
+            tokens.remove(tokens.size() - 1);
+            return r;
         } else if (standardLibrary.isOperator(identifierStr)) {
             return new Token(standardLibrary.getOperatorType(identifierStr), new String[] {identifierStr});
         } else if (Arrays.stream(SPECIAL_WORD).toList().contains(identifierStr)) {
-            return new Token(TokenType.specialWord, new String[] {identifierStr});
+            return new Token(TokenType.keyword, new String[] {identifierStr});
+        } else if (isCall(identifierStr)) {
+            return processCall(identifierStr);
         } else {
             return new Token(TokenType.name, new String[] {identifierStr});
         }
     }
 
+    public boolean isCall(String i) {
+        for (Token token : functions) {
+            if (Objects.equals(token.c[0], i)) return true;
+        }
+        return false;
+    }
+
+    private Token processCall(String call) {
+        List<String> c = new ArrayList<>();
+        c.add(call);
+        c.addAll(Arrays.stream(processArguments()).toList());
+        return new Token(TokenType.call, c.toArray(new String[0]));
+    }
+
     private Token processFunction(String functionName) {
         String[] arguments = processArguments();
-
         if (arguments.length > 0) {
-            return new Token(TokenType.function, new String[] {functionName + ": " + Arrays.toString(arguments)});
+            List<String> f = new ArrayList<>();
+            f.add(functionName);
+            f.addAll(List.of(arguments));
+            return new Token(TokenType.call, f.toArray(new String[0]));
         } else {
-            return new Token(TokenType.function, new String[] {functionName});
+            return new Token(TokenType.call, new String[]{functionName});
         }
     }
 
@@ -176,11 +204,11 @@ public class Lexer {
             case '}':
                 return TokenType.ending;
             case ',':
-                return TokenType.specialChar;
+                return TokenType.special;
             case ';':
-                return TokenType.specialChar;
+                return TokenType.special;
             case ':':
-                return TokenType.specialChar;
+                return TokenType.special;
             default:
                 return TokenType.unknown;
         }

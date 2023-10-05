@@ -16,11 +16,15 @@ public class StandardLibrary {
         // Добавляем доступные операторы
         operators.put("=", TokenType.operator);
         operators.put("+", TokenType.operator);
+        operators.put("/", TokenType.operator);
+        operators.put("*", TokenType.operator);
+        operators.put("++", TokenType.operator);
         // Добавьте остальные операторы по аналогии
         // ...
 
         // Добавляем доступные функции
         addFunction("print", TokenType.keyword, null); // Функция print без кода
+        addFunction("p", TokenType.keyword, null);
         // Добавьте другие функции с кодом по аналогии
         // ...
     }

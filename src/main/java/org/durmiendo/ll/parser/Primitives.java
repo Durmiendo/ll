@@ -26,7 +26,6 @@ public enum Primitives {
     wait,
     stop,
     end,
-    jump,
 
 
     unitBind,

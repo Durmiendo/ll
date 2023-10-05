@@ -10,11 +10,15 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String input = "num = " +
+        String input = "p(0, 0) {" +
                 "function test(argg,gds, sdg) {" +
-                "    return argg + 100" +
+                "    return argg + 100;" +
                 "}" +
-                "num = test(734)";
+                "num = test(734);" +
+                "print(ds, sf); " +
+                "print(jsfsf,sfddsf, sfs, sfd,fs);" +
+                "print() ;" +
+                "}";
 
         Lexer lexer = new Lexer(input);
         List<Token> tokens = lexer.tokenize();

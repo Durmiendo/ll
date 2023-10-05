@@ -1,16 +1,16 @@
 package org.durmiendo.ll.parser;
 
 public enum TokenType {
-    specialWord,
-    num,
-    str,
-    operator,
-    specialChar,
-    keyword,
-    opening,
+    call,
     ending,
     function,
-    arg,
+    keyword,
     name,
+    num,
+    opening,
+    operator,
+    special,
+    str,
     unknown
+
 }
