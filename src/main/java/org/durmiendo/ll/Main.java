@@ -3,7 +3,6 @@ package org.durmiendo.ll;
 
 import org.durmiendo.ll.parser.Lexer;
 import org.durmiendo.ll.parser.Token;
-import org.durmiendo.ll.parser.TokenType;
 
 import java.util.List;
 
