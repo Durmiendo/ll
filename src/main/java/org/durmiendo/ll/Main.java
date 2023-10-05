@@ -27,12 +27,12 @@ public class Main {
             System.out.print(token.type + ": ");
 
             if (token.c.length > 1) {
-                System.out.print("[");
-                for (int i = 0; i < token.c.length - 1; i++) {
+                System.out.print("[" + token.c[0] + ": [");
+                for (int i = 1; i < token.c.length - 1; i++) {
                     System.out.print(token.c[i] + ", ");
                 }
                 System.out.print(token.c[token.c.length - 1]);
-                System.out.print("]");
+                System.out.print("] ]");
             } else {
                 System.out.print(token.c[0]);
             }
